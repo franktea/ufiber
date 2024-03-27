@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.28)
 project(ufiber VERSION 2 LANGUAGES CXX)
 
 option(UFIBER_SANITIZE "Build ufiber tests and examples with address & undefined sanitization enabled" OFF)
@@ -8,7 +8,7 @@ if (UFIBER_SANITIZE)
     link_libraries(-fsanitize=address,undefined)
 endif()
 
-find_package(Boost 1.70
+find_package(Boost 1.84
              COMPONENTS
                 context
                 system
@@ -32,7 +32,7 @@ target_link_libraries(
         Boost::context
         Threads::Threads)
 
-target_compile_features(ufiber INTERFACE cxx_std_11)
+target_compile_features(ufiber INTERFACE cxx_std_20)
 
 include(CTest)
 if(BUILD_TESTING)
