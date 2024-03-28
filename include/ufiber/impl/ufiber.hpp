@@ -11,6 +11,7 @@
 #define UFIBER_IMPL_UFIBER_HPP
 
 #include <ufiber/ufiber.hpp>
+#include <concepts>
 
 namespace ufiber
 {
@@ -30,9 +31,8 @@ yield_token<Executor>::get_executor() noexcept
 }
 
 template<class E, class F>
-auto
-spawn(E const& ex, F&& f) ->
-  typename std::enable_if<boost::asio::is_executor<E>::value>::type
+    requires boost::asio::is_executor<E>::value
+auto spawn(E const& ex, F&& f)
 {
     detail::initial_resume(
       boost::context::fiber{detail::fiber_main<typename std::decay<F>::type, E>{
@@ -40,9 +40,8 @@ spawn(E const& ex, F&& f) ->
 }
 
 template<class Ctx, class F>
-auto
-spawn(Ctx& ctx, F&& f) -> typename std::enable_if<
-  std::is_convertible<Ctx&, boost::asio::execution_context&>::value>::type
+    requires std::convertible_to<Ctx&, boost::asio::execution_context&>
+auto spawn(Ctx& ctx, F&& f)
 {
     detail::initial_resume(
       boost::context::fiber{detail::fiber_main<typename std::decay<F>::type,

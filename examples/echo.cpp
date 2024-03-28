@@ -68,7 +68,7 @@ accept(ufiber::yield_token<net::io_context::executor_type> yield)
     tcp_acceptor acceptor{
       ex.context(), net::ip::tcp::endpoint{net::ip::address_v6::any(), 8000}};
 
-    tcp_socket s{ex.context()};
+    tcp_socket s{ex};
     for (;;)
     {
         // When an async operation returns 1 result, it's not wrapped into a
