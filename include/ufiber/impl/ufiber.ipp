@@ -59,10 +59,12 @@ fiber_context::final_suspend() noexcept
     return std::move(fiber_);
 }
 
-void
-initial_resume(boost::context::fiber&& f)
+void initial_resume(boost::context::fiber&& f)
 {
     f = std::move(f).resume();
+
+    //TODO: initial_resume是在spawn时调用的，下面这句判断的意思是说，
+    // resume()回来以后f是空的
     assert(!f && "Unexpected fiber");
 }
 
